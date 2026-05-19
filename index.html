@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="theme-color" content="#05070d" />
-<title>Last Runner v0.2</title>
+<title>Last Runner v0.3</title>
 <style>
   :root{
     --bg:#05070d;
@@ -15,18 +15,18 @@
     --stroke:rgba(255,255,255,.18);
     --text:#f7f7fb;
     --muted:rgba(247,247,251,.68);
-    --danger:#ff4d67;
-    --energy:#5ddcff;
-    --gold:#ffd66b;
-    --green:#6dffb4;
+    --danger:#ff7b88;
+    --energy:#8fdcff;
+    --gold:#ffd7a0;
+    --green:#8bf0c2;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
   html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter","Segoe UI",sans-serif;}
   body:before{content:"";position:fixed;inset:0;background:
-    radial-gradient(circle at 50% -10%, rgba(93,220,255,.18), transparent 38%),
-    radial-gradient(circle at 88% 18%, rgba(255,77,103,.12), transparent 30%),
-    radial-gradient(circle at 14% 78%, rgba(127,91,255,.16), transparent 36%),
-    linear-gradient(180deg,#060815 0%,#080912 48%,#030407 100%);pointer-events:none;}
+    radial-gradient(circle at 50% -10%, rgba(255,214,191,.22), transparent 38%),
+    radial-gradient(circle at 82% 22%, rgba(186,164,255,.15), transparent 30%),
+    radial-gradient(circle at 14% 78%, rgba(146,203,255,.14), transparent 36%),
+    linear-gradient(180deg,#0b0d18 0%,#111427 44%,#090b11 100%);pointer-events:none;}
   #app{position:relative;width:100%;height:100%;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);}
   #stageWrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:12px;}
   canvas{width:min(calc(100vw - 24px),177.78vh);height:min(calc((100vw - 24px) / 1.7778),calc(100vh - 24px));max-width:100vw;max-height:100vh;display:block;border-radius:28px;background:#05070d;box-shadow:0 28px 90px rgba(0,0,0,.58), inset 0 0 0 1px rgba(255,255,255,.08);}
@@ -103,13 +103,13 @@
 
   <div id="menu" class="overlay">
     <div class="glass">
-      <div class="eyebrow">v0.2 · Dead City Landscape</div>
+      <div class="eyebrow">v0.3 · Silent Valley Visual Update</div>
       <h1>Last<br/>Runner</h1>
       <div class="subtitle">Run. Shoot. Survive.</div>
       <button id="startBtn" class="primary">Start Run</button>
       <div class="secondary-row">
         <div class="pill">Ryder</div>
-        <div class="pill">Pistol Start</div>
+        <div class="pill">Painterly World</div>
         <div class="pill">100 HP Bar</div>
       </div>
     </div>
@@ -443,44 +443,127 @@ function roundRect(c,x,y,w,h,r){
   c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath();
 }
 function drawBg(){
-  const grd=ctx.createLinearGradient(0,0,0,H); grd.addColorStop(0,'#070a17'); grd.addColorStop(.36,'#0f1030'); grd.addColorStop(1,'#04060d'); ctx.fillStyle=grd; ctx.fillRect(0,0,W,H);
+  const sky = ctx.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0,'#f0b4be');
+  sky.addColorStop(.26,'#d9a7cb');
+  sky.addColorStop(.56,'#8f86bf');
+  sky.addColorStop(1,'#47507f');
+  ctx.fillStyle = sky; ctx.fillRect(0,0,W,H);
+
   ctx.save();
-  const g1=ctx.createRadialGradient(980,140,0,980,140,420); g1.addColorStop(0,'rgba(122,92,255,.24)'); g1.addColorStop(1,'rgba(122,92,255,0)'); ctx.fillStyle=g1; ctx.fillRect(510,-180,760,620);
-  const g2=ctx.createRadialGradient(230,420,0,230,420,360); g2.addColorStop(0,'rgba(0,187,255,.15)'); g2.addColorStop(1,'rgba(0,187,255,0)'); ctx.fillStyle=g2; ctx.fillRect(-140,90,700,650);
+  let glow = ctx.createRadialGradient(470,120,0,470,120,360);
+  glow.addColorStop(0,'rgba(255,232,216,.45)');
+  glow.addColorStop(1,'rgba(255,232,216,0)');
+  ctx.fillStyle = glow; ctx.fillRect(120,-120,760,430);
+  glow = ctx.createRadialGradient(940,170,0,940,170,340);
+  glow.addColorStop(0,'rgba(196,185,255,.22)');
+  glow.addColorStop(1,'rgba(196,185,255,0)');
+  ctx.fillStyle = glow; ctx.fillRect(620,-110,520,420);
   ctx.restore();
-  ctx.save();ctx.globalAlpha=.82;ctx.fillStyle='#dce3ff';ctx.beginPath();ctx.arc(1088,100,42,0,Math.PI*2);ctx.fill();ctx.globalAlpha=.12;ctx.beginPath();ctx.arc(1088,100,78,0,Math.PI*2);ctx.fill();ctx.restore();
 
-  const offset = (g.distance*4) % 520;
-  drawSkyline(-offset*.14, 248, .42, '#070910', .92);
-  drawSkyline(-offset*.34, 322, .62, '#0c1021', .95);
-  drawSkyline(-offset*.58, 412, .9, '#11172a', 1);
+  drawCloud(210,115,1.2,'rgba(255,241,234,.36)');
+  drawCloud(520,92,1.55,'rgba(255,238,230,.38)');
+  drawCloud(920,140,1.1,'rgba(255,241,240,.24)');
 
-  const road=ctx.createLinearGradient(0,groundY-36,0,H); road.addColorStop(0,'#171a27'); road.addColorStop(.5,'#0b0e17'); road.addColorStop(1,'#040507'); ctx.fillStyle=road; ctx.fillRect(0,groundY-26,W,H-groundY+26);
-  ctx.fillStyle='rgba(255,255,255,.05)'; ctx.fillRect(0,groundY-18,W,2);
-  ctx.strokeStyle='rgba(93,220,255,.12)'; ctx.lineWidth=3;
-  for(let i=0;i<18;i++){ const x=((i*110-(g.distance*45)%110)+W)%W; ctx.beginPath(); ctx.moveTo(x,groundY+52); ctx.lineTo(x+48,groundY+52); ctx.stroke(); }
+  ctx.fillStyle='rgba(255,231,220,.18)';
+  ctx.beginPath();
+  ctx.moveTo(0,238); ctx.quadraticCurveTo(220,210,420,228); ctx.quadraticCurveTo(680,252,960,222); ctx.quadraticCurveTo(1120,206,1280,218); ctx.lineTo(1280,280); ctx.lineTo(0,280); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='rgba(232,217,236,.16)';
+  ctx.beginPath();
+  ctx.moveTo(0,258); ctx.quadraticCurveTo(180,238,360,248); ctx.quadraticCurveTo(610,268,820,248); ctx.quadraticCurveTo(1030,226,1280,240); ctx.lineTo(1280,310); ctx.lineTo(0,310); ctx.closePath(); ctx.fill();
 
-  for(let i=0;i<7;i++){
-    const x = ((i*228 - (g.distance*25)%1596)+W+220)%1596 - 120;
-    const y = groundY - 44 - (i%3)*8;
-    ctx.fillStyle='rgba(15,18,28,.95)'; roundRect(ctx,x,y,66,54,10); ctx.fill();
-    ctx.strokeStyle = i%2 ? 'rgba(255,77,103,.55)' : 'rgba(93,220,255,.55)'; ctx.lineWidth=3; roundRect(ctx,x+6,y+8,54,38,8); ctx.stroke();
+  const base = g.distance * 0.6;
+  drawHillLayer(base*0.10, 328, '#71689a', [0,36,16,42,18,52,12]);
+  drawHillLayer(base*0.18, 376, '#5d5c8b', [0,54,25,60,20,74,14]);
+  drawHillLayer(base*0.30, 438, '#4d4d77', [0,76,42,70,36,92,28]);
+  drawHillLayer(base*0.48, 500, '#34395d', [0,102,66,94,62,110,52]);
+
+  ctx.save();
+  ctx.globalAlpha=.20;
+  const water = ctx.createLinearGradient(0,320,0,408);
+  water.addColorStop(0,'#f8d7ce'); water.addColorStop(1,'rgba(248,215,206,0)');
+  ctx.fillStyle=water; ctx.fillRect(390,270,390,118);
+  ctx.restore();
+
+  for(let i=0;i<12;i++){
+    const x = ((i*128 - (g.distance*0.42)%1536)+1536)%1536 - 80;
+    drawPine(x, 462 - (i%3)*10, 0.72 + (i%4)*0.05, 'rgba(58,56,86,.95)');
+  }
+  for(let i=0;i<6;i++){
+    const x = ((i*220 - (g.distance*0.24)%1760)+1760)%1760 - 160;
+    drawRoundTree(x, 248 - (i%2)*10, 1.2 + (i%3)*0.12, 'rgba(62,48,80,.9)');
+  }
+  for(let i=0;i<4;i++){
+    const x = ((i*300 - (g.distance*0.16)%1800)+1800)%1800 - 120;
+    drawTower(x, 420 - (i%2)*16, .9 + (i%3)*.08, 'rgba(74,71,108,.45)');
   }
 
-  ctx.save(); ctx.strokeStyle='rgba(210,232,255,.22)'; ctx.lineWidth=1.2; for(const r of g.rain){ctx.beginPath();ctx.moveTo(r.x,r.y);ctx.lineTo(r.x-8,r.y+r.l);ctx.stroke();} ctx.restore();
+  const road=ctx.createLinearGradient(0,groundY-44,0,H);
+  road.addColorStop(0,'#20263e');
+  road.addColorStop(.45,'#14182b');
+  road.addColorStop(1,'#0a0c14');
+  ctx.fillStyle=road; ctx.fillRect(0,groundY-28,W,H-groundY+28);
+  ctx.fillStyle='rgba(255,255,255,.07)'; ctx.fillRect(0,groundY-18,W,2);
+
+  ctx.fillStyle='rgba(18,19,28,.96)';
+  ctx.beginPath(); ctx.moveTo(0,H);
+  for(let x=0; x<=W; x+=26){
+    const y = groundY - 18 - Math.sin((x+g.distance*0.18)*0.05)*12 - ((x/26)%2?8:0);
+    ctx.lineTo(x, y);
+  }
+  ctx.lineTo(W,H); ctx.closePath(); ctx.fill();
+
+  ctx.save(); ctx.strokeStyle='rgba(198,185,214,.08)'; ctx.lineWidth=3;
+  for(let i=0;i<18;i++){
+    const x=((i*110-(g.distance*45)%110)+W)%W;
+    ctx.beginPath(); ctx.moveTo(x,groundY+54); ctx.lineTo(x+50,groundY+54); ctx.stroke();
+  }
+  ctx.restore();
+
+  ctx.strokeStyle='rgba(46,38,66,.55)'; ctx.lineWidth=1.4;
+  for(let i=0;i<9;i++){
+    const x = ((i*130 - (g.distance*0.22)%1460)+1460)%1460 - 70;
+    const y = 82 + (i%3)*16;
+    ctx.beginPath(); ctx.moveTo(x,y); ctx.quadraticCurveTo(x+6,y-4,x+12,y); ctx.quadraticCurveTo(x+18,y-4,x+24,y); ctx.stroke();
+  }
 }
 function drawSkyline(xoff, baseY, scale, color, alpha){
-  ctx.save(); ctx.fillStyle=color; ctx.globalAlpha=alpha;
-  for(let i=-1;i<12;i++){
-    const x = xoff + i*150*scale + 30;
-    const w = (80 + (i%4)*22)*scale, h=(145 + ((i*37)%110))*scale;
-    ctx.fillRect(x, baseY-h, w, h);
-    if(i%3===0){ctx.fillRect(x+w*.26, baseY-h-54*scale, w*.28, 54*scale);}
-    ctx.globalAlpha=alpha*.34; ctx.fillStyle='rgba(93,220,255,.35)';
-    for(let yy=baseY-h+22*scale; yy<baseY-24*scale; yy+=26*scale){ if((i+Math.floor(yy))%2===0) ctx.fillRect(x+w*.18,yy,w*.18,3*scale); }
-    ctx.fillStyle=color; ctx.globalAlpha=alpha;
+  // painterly scene uses hill layers instead of hard skyline blocks
+}
+function drawCloud(x,y,s,color){
+  ctx.save(); ctx.fillStyle=color; ctx.beginPath();
+  ctx.ellipse(x,y,64*s,26*s,0,0,Math.PI*2);
+  ctx.ellipse(x+46*s,y-12*s,52*s,24*s,0,0,Math.PI*2);
+  ctx.ellipse(x+94*s,y-2*s,68*s,28*s,0,0,Math.PI*2);
+  ctx.ellipse(x+144*s,y+10*s,50*s,22*s,0,0,Math.PI*2);
+  ctx.fill(); ctx.restore();
+}
+function drawHillLayer(offset, baseY, color, heights){
+  ctx.save(); ctx.fillStyle=color; ctx.beginPath(); ctx.moveTo(0,H);
+  for(let i=0;i<=8;i++){
+    const x = i * 170 - (offset % 170);
+    const h = heights[i % heights.length];
+    const nextH = heights[(i+1) % heights.length];
+    if(i===0) ctx.lineTo(x, baseY - h);
+    ctx.quadraticCurveTo(x + 85, baseY - (h + nextH) * .55, x + 170, baseY - nextH);
   }
+  ctx.lineTo(W,H); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function drawPine(x, baseY, scale, color){
+  ctx.save(); ctx.translate(x, baseY); ctx.scale(scale, scale);
+  ctx.fillStyle = color; ctx.fillRect(-4,-14,8,18);
+  ctx.beginPath(); ctx.moveTo(0,-72); ctx.lineTo(-28,-24); ctx.lineTo(-10,-24); ctx.lineTo(-36,10); ctx.lineTo(0,-6); ctx.lineTo(36,10); ctx.lineTo(10,-24); ctx.lineTo(28,-24); ctx.closePath(); ctx.fill();
   ctx.restore();
+}
+function drawRoundTree(x, topY, scale, color){
+  ctx.save(); ctx.translate(x, topY); ctx.scale(scale, scale);
+  ctx.fillStyle='rgba(40,30,48,.85)'; ctx.fillRect(-5,18,10,46);
+  ctx.fillStyle=color; ctx.beginPath(); ctx.arc(0,0,30,0,Math.PI*2); ctx.arc(24,10,22,0,Math.PI*2); ctx.arc(-24,8,20,0,Math.PI*2); ctx.arc(8,-18,20,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+function drawTower(x, baseY, scale, color){
+  ctx.save(); ctx.translate(x, baseY); ctx.scale(scale, scale);
+  ctx.fillStyle=color; ctx.fillRect(0,-64,30,64); ctx.fillRect(8,-86,14,22); ctx.globalAlpha=.35; ctx.fillRect(10,-48,4,6); ctx.fillRect(18,-34,4,6); ctx.restore();
 }
 function drawPlayer(){
   const p=g.player, x=p.x, y=p.y;
